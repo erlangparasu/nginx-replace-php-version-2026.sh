@@ -45,17 +45,22 @@ update-nginx-php [--dry-run | --fix]
 
 Options:
 
-    --dry-run: (Standard User / Root) Scans configurations and prints files that require updates without making changes.
+`--dry-run` : (Standard User / Root) Scans configurations and prints files that require updates without making changes.
 
-    --fix: (Root / sudo) Performs in-place replacements and validates Nginx configuration syntax.
+`--fix` : (Root / sudo) Performs in-place replacements and validates Nginx configuration syntax.
 
-QUICKSTART & WORKFLOW
+## QUICKSTART & WORKFLOW
 
-    Run a Dry-Run (Recommended First Step)
-    Always run a simulation first to inspect which Nginx site configurations contain outdated PHP references:
+- Run a Dry-Run (Recommended First Step)
+- Always run a simulation first to inspect which Nginx site configurations contain outdated PHP references:
 
+```bash
 ./update-nginx-php --dry-run
+```
+
 Example Output:
+
+```
 Nginx PHP Version Updater
 Target Directory: /etc/nginx/sites-enabled
 Target Threshold: PHP 8.2
@@ -67,28 +72,37 @@ Execution Mode:   dry-run
 [KEEP]  /etc/nginx/sites-enabled/app.com.conf -> php8.3 (>= 8.2)
 ==================================================
 Summary: 1 file(s) identified for update.
+```
 
-    Apply Updates
-    Once verified, execute the script with root privileges to apply changes:
+- Apply Updates
+- Once verified, execute the script with root privileges to apply changes:
 
+```bash
 sudo ./update-nginx-php --fix
+```
 
-    Reload Nginx
-    If the syntax check passes, reload the Nginx daemon to apply the changes to running sites:
+- Reload Nginx
+- If the syntax check passes, reload the Nginx daemon to apply the changes to running sites:
 
+```bash
 sudo systemctl reload nginx
+```
 
-CONFIGURATION VARIABLES
+## CONFIGURATION VARIABLES
 
 If you need to change the target PHP version or site directory, modify the variables near the top of the script:
 
+```bash
 TARGET_DIR="/etc/nginx/sites-enabled"
 TARGET_VERSION="8.2"
+```
 
-SAFETY & BEST PRACTICES
+## SAFETY & BEST PRACTICES
 
-    Backups: Before running --fix in production environments, take a quick snapshot or back up your configuration directory:
-    sudo cp -r /etc/nginx/sites-available /etc/nginx/sites-available.bak
+- Backups: Before running --fix in production environments, take a quick snapshot or back up your configuration directory:
 
-    PHP-FPM Pool Installation: Ensure the target PHP-FPM service (e.g., php8.2-fpm) is installed and active on your VPS before updating Nginx sockets to avoid 502 Bad Gateway errors.
+```bash
+sudo cp -r /etc/nginx/sites-available /etc/nginx/sites-available.bak
+```
 
+> PHP-FPM Pool Installation: Ensure the target PHP-FPM service (e.g., php8.2-fpm) is installed and active on your VPS before updating Nginx sockets to avoid 502 Bad Gateway errors.
